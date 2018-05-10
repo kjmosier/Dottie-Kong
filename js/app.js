@@ -1,50 +1,13 @@
-let dot = document.createElement('div');
-dot.className = "dot";
-let dotX = 50;
-let dotY = 50;
-
-
-arena.appendChild(dot);
-
-
-
-
-
-
-function placeDot() {
-  dot.style.top = dotX + "px";
-  dot.style.left = dotY + "px";
+function startGame() {
+  gameArena.start();
 }
 
-
-xcoord.oninput = function() {
-  dot.style.top = xcoord.value + "px";
-};
-
-
-document.addEventListener('keydown', function(event) {
-  switch (event.code){
-     case 'KeyS':
-       dotX+=6;
-       break;
-     case 'KeyW':
-       dotX -=6;
-       break;
-     case 'KeyA':
-       dotY-=6;
-       break;
-     case 'KeyD':
-       dotY+=6;
-       break;
-     case ('KeyS' && 'KeyD'):
-       dotY+=6;
-       dotX+=6;
-       break;
-
-     default:
-       break;
-     }
-    placeDot();
-});
-
-placeDot();
+var gameArena = {
+  arena : document.createElement("canvas"),
+  start : function() {
+    this.arena.width = 480;
+    this.arena.height = 270;
+    this.context = this.arena.getContext("2d");
+    document.body.insertBefore(this.arena, document.body.childNodes[0]);
+  }
+}
