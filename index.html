@@ -6,28 +6,24 @@
   <link rel="stylesheet" href="styles/main.css">
 </head>
 
-  <body class="center">
+  <body onload="startGame()" class="center">
     <header>
       <h1>Advent of DOT</h1>
     </header>
 
     <div class="alert"></div>
 
-    <div class="input-fields">
-      left
-      <input type="text" id="xcoord" maxlength="10">
-      up
-      <input type="text" id="ycoord" maxlength="10">
+
+
+    <div style="text-align:center;width:480px;">
+      <button onmousedown="moveup()" onmouseup="clearmove()" ontouchstart="moveup()">UP</button><br><br>
+      <button onmousedown="moveleft()" onmouseup="clearmove()" ontouchstart="moveleft()">LEFT</button>
+      <button onmousedown="moveright()" onmouseup="clearmove()" ontouchstart="moveright()">RIGHT</button><br><br>
+      <button onmousedown="movedown()" onmouseup="clearmove()" ontouchstart="movedown()">DOWN</button>
     </div>
-    <span id="result"></span>
-
-
-
-     <div id="arena">
-     </div>
-
-
 
   <script src="js/app.js"></script>
+
+
 </body>
 </html>

@@ -3,12 +3,28 @@ body{
 
 }
 
-
-#arena {
+canvas {
+    border:1px solid #d3d3d3;
+    background-color: #f1f1f1;
+}
+ 
+#arena1 {
   background-color: pink;
-  width: 720px;
-  height: 1280px;
-  border: 4px;
   border: 5px solid red;
   margin: auto;
+}
+
+.dot{
+  width: 20px;
+  height: 25px;
+  position: relative;
+  background-color: darkred;
+}
+
+.center {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
 }
