@@ -87,7 +87,9 @@ function component(width, height, color, x, y, type) {
             this.gravitySpeed = -(this.gravitySpeed * this.bounce);
         }
     }
+
     //  -----  stop at Walls ---------
+
     this.againstWall = function(otherobj) {
             var myleft = this.x;
             var myright = this.x + (this.width);
@@ -97,21 +99,40 @@ function component(width, height, color, x, y, type) {
             var otherright = otherobj.x + (otherobj.width);
             var othertop = otherobj.y;
             var otherbottom = otherobj.y + (otherobj.height);
-            // Hit Top
-            if ((mytop < otherbottom) && (mybottom > otherbottom) &&(myleft < otherright) && (myright > otherleft)){
+
+            var didHit = false;
+
+            // Hit Top ... If Under Other Object
+            if ((mytop < otherbottom) && (mybottom > otherbottom) && (myleft < otherright) && (myright > otherleft)){
               this.y = otherbottom;
-              this.gravitySpeed = 0;
+              this.gravitySpeed = 1;
+              this.gravity = 0.1;
+              didHit = true;
             }
-            //Hit Right
-            if ((mytop < otherbottom) && (mybottom > otherbottom) &&(myleft < otherright) && (myright > otherleft)){
-              this.y = otherbottom;
-              this.gravitySpeed = 0;
-            }
-            //Hit Bottom
-            if ((mybottom > othertop) && (mytop < othertop) &&(myleft < otherright) && (myright > otherleft)){
+            //Hit Bottom ... If Above Other Object
+            if ((mybottom > othertop) && (mytop < othertop) &&(myleft < otherright) && (myright > otherleft)&& !didHit){
               this.y = othertop - this.height;
               this.gravitySpeed = 0;
+              didHit = true;
             }
+
+            //  Hit Right
+            if ((((mytop > othertop) && (mytop < otherbottom))
+                   || ((mybottom >= othertop) && (mybottom <= otherbottom))) && (myright > otherleft) && (myleft < otherleft) && !didHit ){
+                this.x = otherleft - this.width;
+                this.gravitySpeed = 1;
+                this.gravity = 0.1;
+                didHit = true;
+            }
+            //  Hit Left
+            if ((((mytop > othertop) && (mytop < otherbottom))
+                   || ((mybottom >= othertop) && (mybottom <= otherbottom))) && (myleft < otherright) && (myright > otherright) && !didHit){
+                this.x = otherright;
+                this.gravitySpeed = 1;
+                this.gravity = 0.1;
+                didHit = true;
+            }
+
      }
 }
 
