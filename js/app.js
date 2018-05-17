@@ -6,7 +6,8 @@ var jumpSound;
 var hitSound;
 var barrel = [];
 var barrelCount = 0;
-var barrelNumber = 0;
+var barrelSide = true;
+//var barrelNumber = 0;
 
 function startGame() {
   jumpSound = new sound("sounds/jump.mp3");
@@ -15,7 +16,7 @@ function startGame() {
 
   myGamePiece = new component(30, 30, "red", 5, 300, "dot");
   kong = new component (30,50, "brown", 260, 35);
-  barrel[barrelNumber] = new component (25, 25, "brown", 270, 35, "barrel");
+  barrel[0] = new component (25, 25, "brown", 270, 35, "barrel");
 
 
   deck[0] = new platform(200, 15, "green", 150, 85);
@@ -93,7 +94,10 @@ function component(width, height, color, x, y, type) {
     this.gravity = 0.1;
     this.gravitySpeed = 0;
     this.bounce = 0;
-    if (this.type == "barrel"){this.speedX = 1}
+    if (this.type == "barrel"){
+      barrelSide ? this.speedX = 1 : this.speedX = -1;
+      barrelSide = !barrelSide;
+    }
     this.update = function() {
         ctx = myGameArea.context;
         ctx.fillStyle = color;
@@ -134,6 +138,9 @@ function component(width, height, color, x, y, type) {
             jumpOnTopSound.play();
             this.gravitySpeed = -2;
           }
+          if (this.type == "barrel" && obj.type == "barrel"){
+          //  alert('Two Barrels!');
+          }
         }
         if (b_collision < t_collision && b_collision < l_collision && b_collision < r_collision){
           //bottom collision
@@ -143,6 +150,9 @@ function component(width, height, color, x, y, type) {
             hitSound.play();
             this.gravitySpeed = -10;
             myGameArea.stop();
+          }
+          if (this.type == "barrel" && obj.type == "barrel"){
+            //alert('Two Barrels!');
           }
 
         }
@@ -156,12 +166,18 @@ function component(width, height, color, x, y, type) {
             this.gravitySpeed = -10;
             myGameArea.stop();
           }
+          if (this.type == "barrel" && obj.type == "barrel"){
+            //alert('Two Barrels!');
+          }
         }
         if (r_collision < l_collision && r_collision < t_collision && r_collision < b_collision )
         {
           //Right collision
           this.x = this.prevX;
           if (this.type == "barrel"){this.speedX *= -1}
+          if (this.type == "barrel" && obj.type == "barrel"){
+            //alert('Two Barrels!');
+          }
           if (this.type == "dot" && obj.type == "barrel"){
             hitSound.play();
             this.gravitySpeed = -10;
@@ -201,17 +217,24 @@ function updateGameArea() {
      }
     kong.update();
     myGamePiece.newPos();
-    for (i = 0; i < barrel.length; i += 1){
+
+    for (var i in barrel){
       barrel[i].newPos();
     }
+
     myGamePiece.update();
-    for (i = 0; i < barrel.length; i += 1){
+
+    for (var i in barrel){
        barrel[i].update();
-     }
+    }
+
     for (i = 0; i < deck.length; i += 1){
       deck[i].update();
     }
-    barrel.push(new component (25, 25, "brown", 270, 35, "barrel"));
+    barrelCount += 1;
+    if (barrelCount % 400 == 0){
+      barrel.push(new component (25, 25, "brown", 260, 35, "barrel"));
+    }
 
 }
 
