@@ -2,12 +2,26 @@
 
 var myGamePiece;
 var deck = [];
+var jumpSound;
 
 function startGame() {
-  myGamePiece = new component(30, 30, "red", 0, 0);
-  deck[0] = new platform(200, 15, "blue", 100, 225);
-  deck[1] = new platform(300, 15, "blue", 70, 240);
-  deck[2] = new platform(300, 15, "blue",120, 310);
+  jumpSound = new sound("sounds/Funny-cartoon-jump-sound-effect.mp3");
+
+  myGamePiece = new component(30, 30, "red", 5, 5);
+  kong = new component (30,50, "brown", 260, 35);
+  barrel = new component (25, 25, "brown", 260, 35);
+
+
+  deck[0] = new platform(200, 15, "green", 150, 85);
+  deck[1] = new platform(300, 15, "green", 80, 145);
+  deck[2] = new platform(300, 15, "green",120, 200);
+  deck[3] = new platform(300, 15, "green",85, 250);
+  deck[4] = new platform(300, 15, "green",45, 310);
+
+  deck[5] = new platform(5, 350, "blue", 0, 0);
+  deck[6] = new platform(5, 350, "blue", 535, 0);
+  deck[7] = new platform(540, 5, "blue", 0, 0);
+  deck[8] = new platform(540, 5, "blue", 0, 345);
 
     myGameArea.start();
 }
@@ -155,12 +169,33 @@ function updateGameArea() {
     if (myGameArea.keys && myGameArea.keys[37]) {myGamePiece.speedX = -1; }
     if (myGameArea.keys && myGameArea.keys[39]) {myGamePiece.speedX = 1; }
     if (myGameArea.keys && myGameArea.keys[32]) {
-       if (myGamePiece.gravitySpeed == 0){myGamePiece.gravitySpeed = -4;}
+       if (myGamePiece.gravitySpeed == 0){
+         myGamePiece.gravitySpeed = -4;
+         jumpSound.play();
+       }
      }
 
     myGamePiece.newPos();
     myGamePiece.update();
+    kong.update();
     for (i = 0; i < deck.length; i += 1){
       deck[i].update();
+    }
+}
+
+
+function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+  //  this.sound.setAttribute("crossOrigin", "anonymous");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
     }
 }
