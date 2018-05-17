@@ -7,16 +7,16 @@ var jumpSound;
 function startGame() {
   jumpSound = new sound("sounds/Funny-cartoon-jump-sound-effect.mp3");
 
-  myGamePiece = new component(30, 30, "red", 5, 5);
+  myGamePiece = new component(30, 30, "red", 5, 300);
   kong = new component (30,50, "brown", 260, 35);
-  barrel = new component (25, 25, "brown", 260, 35);
+  barrel = new component (25, 25, "brown", 270, 35, "barrel");
 
 
   deck[0] = new platform(200, 15, "green", 150, 85);
-  deck[1] = new platform(300, 15, "green", 80, 145);
-  deck[2] = new platform(300, 15, "green",120, 200);
-  deck[3] = new platform(300, 15, "green",85, 250);
-  deck[4] = new platform(300, 15, "green",45, 310);
+  deck[1] = new platform(300, 15, "green", 0, 145);
+  deck[2] = new platform(300, 15, "green", 240, 200);
+  deck[3] = new platform(300, 15, "green", 0, 250);
+  deck[4] = new platform(300, 15, "green", 240, 310);
 
   deck[5] = new platform(5, 350, "blue", 0, 0);
   deck[6] = new platform(5, 350, "blue", 535, 0);
@@ -68,6 +68,8 @@ function platform(width, height, color, x, y){
       ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 }
+//  -----------------   Barrels  ---------------
+
 
 
 // --------------     Game Piece --------------
@@ -84,6 +86,7 @@ function component(width, height, color, x, y, type) {
     this.gravity = 0.1;
     this.gravitySpeed = 0;
     this.bounce = 0;
+    if (this.type == "barrel"){this.speedX = 1}
     this.update = function() {
         ctx = myGameArea.context;
         ctx.fillStyle = color;
@@ -123,24 +126,27 @@ function component(width, height, color, x, y, type) {
           //alert ('Top');
           this.y = this.prevY;
           this.gravitySpeed = 0;
+          if (this.type == "barrel"){this.gravitySpeed = -1;}
         }
         if (b_collision < t_collision && b_collision < l_collision && b_collision < r_collision){
           //bottom collision
-          //alert ('Bottom');
           this.y = this.prevY;
-          this.gravitySpeed = .5 ;
+          this.gravitySpeed = .5;
+
+
         }
         if (l_collision < r_collision && l_collision < t_collision && l_collision < b_collision)
         {
           //Left collision
-        //  alert ('Left');
           this.x = this.prevX;
+          if (this.type == "barrel"){this.speedX *= -1}
+
         }
         if (r_collision < l_collision && r_collision < t_collision && r_collision < b_collision )
         {
           //Right collision
-        //  alert ('Right');
           this.x = this.prevX;
+          if (this.type == "barrel"){this.speedX *= -1}
         }
 
     }
@@ -176,8 +182,11 @@ function updateGameArea() {
      }
 
     myGamePiece.newPos();
+    barrel.newPos();
     myGamePiece.update();
+    barrel.update();
     kong.update();
+
     for (i = 0; i < deck.length; i += 1){
       deck[i].update();
     }
