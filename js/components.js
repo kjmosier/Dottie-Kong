@@ -1,12 +1,9 @@
-
-
-
-
 // --------------     Game Piece --------------
 function component(width, height, color, x, y, type) {
     this.type = type;
     this.width = width;
     this.height = height;
+    this.color = color;
     this.x = x;
     this.y = y;
     this.prevX = x;
@@ -25,8 +22,14 @@ function component(width, height, color, x, y, type) {
 
     this.update = function() {
         ctx = myGameArea.context;
-        ctx.fillStyle = color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        if (this.type == "text") {
+          ctx.font = this.width + " " + this.height;
+          ctx.fillStyle = this.color;
+          ctx.fillText(this.text, this.x, this.y);
+        } else {
+          ctx.fillStyle = this.color;
+          ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
         this.prevX = this.x;
         this.prevY = this.y;
     }
@@ -35,10 +38,10 @@ function component(width, height, color, x, y, type) {
         this.x += this.speedX;
         this.y += this.speedY + this.gravitySpeed;
         for (i = 0; i < deck.length; i += 1){
-          this.collision(deck[i]);
+          collision(this, deck[i]);
         }
         for (i = 0; i < barrel.length; i += 1){
-          this.collision(barrel[i]);
+          collision(this, barrel[i]);
         }
     }
 
@@ -63,9 +66,8 @@ function component(width, height, color, x, y, type) {
             jumpOnTopSound.play();
             this.gravitySpeed = -2;
           }
-          if (this.type == "barrel" && obj.type == "barrel"){
-          //  alert('Two Barrels!');
-          }
+          // Two barrels collide nothing happens, direction is changed in above line
+          if (this.type == "barrel" && obj.type == "barrel"){}
         }
         if (b_collision < t_collision && b_collision < l_collision && b_collision < r_collision){
           //bottom collision
@@ -76,9 +78,8 @@ function component(width, height, color, x, y, type) {
             this.gravitySpeed = -10;
             myGameArea.stop();
           }
-          if (this.type == "barrel" && obj.type == "barrel"){
-            //alert('Two Barrels!');
-          }
+          // Two barrels collide nothing happens, direction is changed in above line
+          if (this.type == "barrel" && obj.type == "barrel"){}
 
         }
         if (l_collision < r_collision && l_collision < t_collision && l_collision < b_collision)
@@ -91,18 +92,16 @@ function component(width, height, color, x, y, type) {
             this.gravitySpeed = -10;
             myGameArea.stop();
           }
-          if (this.type == "barrel" && obj.type == "barrel"){
-            //alert('Two Barrels!');
-          }
+          // Two barrels collide nothing happens, direction is changed in above line
+          if (this.type == "barrel" && obj.type == "barrel"){}
         }
         if (r_collision < l_collision && r_collision < t_collision && r_collision < b_collision )
         {
           //Right collision
           this.x = this.prevX;
           if (this.type == "barrel"){this.speedX *= -1}
-          if (this.type == "barrel" && obj.type == "barrel"){
-            //alert('Two Barrels!');
-          }
+          // Two barrels collide nothing happens, direction is changed in above line
+          if (this.type == "barrel" && obj.type == "barrel"){}
           if (this.type == "dot" && obj.type == "barrel"){
             hitSound.play();
             this.gravitySpeed = -10;
@@ -124,11 +123,16 @@ function component(width, height, color, x, y, type) {
       }
 
 
-    }
+}
+//-----------------  END Component Class --------
 
-    // --------------    platform --------------
+// ---------------   Component Helpers ----
 
-    function platform(width, height, color, x, y){
+
+
+// --------------    Platform Class--------------
+
+function platform(width, height, color, x, y){
       this.width = width;
       this.height = height;
       this.x = x;

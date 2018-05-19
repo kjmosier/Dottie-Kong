@@ -1,4 +1,5 @@
 var myGamePiece;
+var myScore = 0;
 var deck = [];
 var jumpSound;
 var hitSound;
@@ -6,6 +7,8 @@ var barrel = [];
 var barrelSide = true;
 
 function startGame() {
+  showScore = new component("15px", "Consolas", "black", 420, 25, "text");
+
   jumpSound = new sound("sounds/jump.mp3");
   hitSound = new sound("sounds/hit.wav");
   jumpOnTopSound = new sound("sounds/jumpOnTop.wav");
@@ -74,6 +77,9 @@ function updateGameArea() {
          jumpSound.play();
        }
      }
+
+    showScore.text = "SCORE: " + myScore;
+    showScore.update();
     kong.update();
     myGamePiece.newPos();
 
