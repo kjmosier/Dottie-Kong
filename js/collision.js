@@ -76,7 +76,7 @@ function playerSmashBarrel(hitBarrel){
 }
 
 function crushBarrel(hitBarrel){
-  jumpOnTopSound.play();
+  jumpCrushSound.play();
   myGamePiece.gravitySpeed = -2;
   myScore +=20 ;
   hitBarrel.type = "smashedBarrel";
