@@ -5,33 +5,17 @@ var jumpSound;
 var hitSound;
 var barrel = [];
 var barrelSide = true;
-var lives = 3;
+var lives = 1;
 var paused = true;
 
 function startGame() {
   showScore = new component("15px", "Consolas", "black", 420, 25, "text");
-  startRect = {x: 100, y: 100, w: 70, h:30};
-  jumpSound = new sound("sounds/jump.mp3");
-  hitSound = new sound("sounds/hit.wav");
-  jumpOnTopSound = new sound("sounds/jumpOnTop.wav");
-  jumpCrushSound = new sound("sounds/Cartoon-pop.mp3");
-
-  myGamePiece = new component(30, 30, "red", 5, 300, "dot");
+  startRect = {x: 190, y: 110, w: 140, h:70};
+  loadSounds();
+  loadLandscape();
+  myGamePiece = new component(30, 30, "red", 500, 30, "dot");
   kong = new component (30,50, "brown", 260, 35);
-  barrel[0] = new component (25, 25, "brown", 260, 35, "barrel");
-
-
-  deck[0] = new platform(200, 15, "green", 150, 85);
-  deck[1] = new platform(300, 15, "green", 0, 145);
-  deck[2] = new platform(300, 15, "green", 240, 200);
-  deck[3] = new platform(300, 15, "green", 0, 250);
-  deck[4] = new platform(300, 15, "green", 240, 310);
-
-  deck[5] = new platform(5, 350, "blue", 0, 0);
-  deck[6] = new platform(5, 350, "blue", 535, 0);
-  deck[7] = new platform(540, 5, "blue", 0, 0);
-  deck[8] = new platform(540, 5, "blue", 0, 345);
-
+  pushBarrel();
   myGameArea.start();
 }
 
@@ -55,8 +39,6 @@ var myGameArea = {
         })
         this.canvas.addEventListener('click', checkStart, false);
       },
-
-
      stop : function() {
         clearInterval(this.interval);
      },
@@ -85,14 +67,18 @@ function updateGameArea() {
     for (var i in barrel){barrel[i].update();}
     for (var i in deck){deck[i].update();}
     //------------------  Throw Barrel ---------------
-    if (everyinterval(400)){
-       barrel.push(new component (25, 25, "brown", 260, 35, "barrel"));
-     }
+    if (everyinterval(300)){pushBarrel()}
 
-    if(paused){showStartButton();}
+    if(paused){
+      lives == -1 ? displayGameOver() : showStartButton();
+    }
  }
 
- // ---
+ // ------     End Update GAME AREA  ---------
+
+
+
+ // ---------     Game Update Helpers  --------
 function everyinterval(n) {
       if ((myGameArea.frameNo / n) % 1 == 0) {return true;}
       return false;
@@ -124,15 +110,25 @@ function printLives(){
 }
 
 function showStartButton(){
-  myGameArea.context.fillText("play", startRect.x, startRect.y +16)
+  ctx = myGameArea.context;
+  ctx.globalAlpha = 0.8;
+  ctx.fillStyle = "white";
+  ctx.fillRect(startRect.x, startRect.y, startRect.w, startRect.h);
+  ctx.globalAlpha = 1.0;
+  ctx.font = "60px Arial";
+  ctx.fillStyle = "yellow";
+  ctx.strokeStyle = "green";
+  ctx.fillText("Play", startRect.x + 10, startRect.y + 55);;
+  ctx.strokeText("Play", startRect.x + 10, startRect.y + 55);
 }
 
 function checkStart(e) {
     var p = getMousePos(e);
     if (p.x >= startRect.x && p.x <= startRect.x + startRect.w &&
         p.y >= startRect.y && p.y <= startRect.y + startRect.h) {
-          paused = !paused;
-    }
+          if (paused && lives >=0 ){paused = !paused};
+          if (paused && lives < 0 ){restartGame()};
+     }
 }
 
 function getMousePos(e) {
@@ -142,3 +138,45 @@ function getMousePos(e) {
         y: e.clientY - r.top
     };
 }
+
+//---------            Player Hit  --------------
+
+function playerDown (player){
+  lives -= 1;
+  if(lives == -1){
+    paused = true;
+  }
+  else{
+    wait(1500);
+    paused = true;
+    barrel = [];
+    pushBarrel();
+    myGamePiece = new component(30, 30, "red", 500, 30, "dot");
+  }
+}
+
+function restartGame(){
+  myGamePiece = new component(30, 30, "red", 500, 30, "dot");
+  barrel = [];
+  pushBarrel();
+  lives = 3;
+  myScore = 0;
+}
+
+function displayGameOver(){
+  ctx = myGameArea.context;
+  ctx.font = "60px Arial";
+  ctx.fillStyle = "yellow";
+  ctx.strokeStyle = "green";
+  ctx.fillText("Game Over", 100, 160);
+  ctx.strokeText("Game Over", 100, 160);
+}
+
+function wait(ms){
+  var d = new Date();
+  var d2 = null;
+  do { d2 = new Date(); }
+  while(d2-d < ms);
+}
+
+function pushBarrel(){barrel.push(new component (25, 25, "brown", 260, 35, "barrel"));}

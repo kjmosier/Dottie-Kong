@@ -31,7 +31,7 @@ function collision(obj, other){
         if (b_collision < t_collision && b_collision < l_collision && b_collision < r_collision){
           obj.y = obj.prevY;
           obj.gravitySpeed = .5;
-          if (obj.type == "dot" && other.type == "barrel"){barrelHitPlayer()}
+          if (obj.type == "dot" && other.type == "barrel"){barrelHitPlayer(obj)}
           // Two barrels collide nothing happens, direction is changed in above line
           if (obj.type == "barrel" && other.type == "barrel"){}
         }
@@ -39,7 +39,7 @@ function collision(obj, other){
         if (l_collision < r_collision && l_collision < t_collision && l_collision < b_collision){
           obj.x = obj.prevX;
           if (obj.type == "barrel"){obj.speedX *= -1}
-          if (obj.type == "dot" && other.type == "barrel"){barrelHitPlayer()}
+          if (obj.type == "dot" && other.type == "barrel"){barrelHitPlayer(obj)}
           // Two barrels collide nothing happens, direction is changed in above line
           if (obj.type == "barrel" && other.type == "barrel"){}
         }
@@ -50,7 +50,7 @@ function collision(obj, other){
           if (obj.type == "barrel"){obj.speedX *= -1}
           // Two barrels collide nothing happens, direction is changed in above line
           if (obj.type == "barrel" && other.type == "barrel"){}
-          if (obj.type == "dot" && other.type == "barrel"){barrelHitPlayer()}
+          if (obj.type == "dot" && other.type == "barrel"){barrelHitPlayer(obj)}
         }
 
     }
@@ -59,18 +59,18 @@ function collision(obj, other){
 
 // --------  Collision Results ------------------
 
-function barrelHitPlayer(){
+function barrelHitPlayer(player){
   hitSound.play();
-  myGamePiece.gravitySpeed = -10;
-  myGameArea.stop();
+  //myGamePiece.gravitySpeed = -10;
+  playerDown(player);
 }
 
 function playerSmashBarrel(hitBarrel){
-  jumpOnTopSound.play();
   myGamePiece.gravitySpeed = -2;
   if (hitBarrel.color == "yellow"){crushBarrel(hitBarrel);}
   else{
     myScore +=10 ;
+    jumpOnTopSound.play();
     hitBarrel.color = "yellow";
   }
 }
