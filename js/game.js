@@ -5,6 +5,7 @@ var jumpSound;
 var hitSound;
 var barrel = [];
 var barrelSide = true;
+var brokenBarrels = [];
 var lives = 1;
 var paused = true;
 
@@ -66,6 +67,7 @@ function updateGameArea() {
     myGamePiece.update();
     for (var i in barrel){barrel[i].update();}
     for (var i in deck){deck[i].update();}
+    for (var i in brokenBarrels){brokenBarrels[i].update();}
     //------------------  Throw Barrel ---------------
     if (everyinterval(300)){pushBarrel()}
 

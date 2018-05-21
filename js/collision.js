@@ -4,9 +4,11 @@ function collision(obj, other){
     obj.x + obj.width > other.x &&
     obj.y < other.y + other.height &&
     obj.height + obj.y > other.y) {
-      collisionDirection(obj , other);
+    return true;
     }
+    return false;
   }
+
 
   function collisionDirection (obj, other){
       var player_bottom = obj.y + obj.height;
@@ -79,6 +81,7 @@ function crushBarrel(hitBarrel){
   jumpCrushSound.play();
   myGamePiece.gravitySpeed = -2;
   myScore +=20 ;
+  brokenBarrels.push (new brokenBarrel (hitBarrel.x, hitBarrel.y));
   hitBarrel.type = "smashedBarrel";
   barrel = barrel.filter(function( obj ){
     return obj.type !== 'smashedBarrel';

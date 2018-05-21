@@ -38,10 +38,10 @@ function component(width, height, color, x, y, type) {
         this.x += this.speedX;
         this.y += this.speedY + this.gravitySpeed;
         for (i = 0; i < deck.length; i += 1){
-          collision(this, deck[i]);
+          if (collision(this, deck[i])){collisionDirection(this, deck[i])}
         }
         for (i = 0; i < barrel.length; i += 1){
-          collision(this, barrel[i]);
+          if (collision(this, barrel[i])){collisionDirection(this, barrel[i])}
         }
     }
 
@@ -49,6 +49,30 @@ function component(width, height, color, x, y, type) {
 //-----------------  END Component Class --------
 
 // ---------------   Component Helpers ----
+
+function brokenBarrel(x, y){
+  this.x = x;
+  this.y = y;
+  this.height = 25;
+  this.width = 20;
+  collide = false;
+  while (!collide){
+      for (i = 0; i < deck.length; i += 1){
+        if (collision(this, deck[i])){collide == true;}
+      }
+      this.y += 1;
+  }
+
+  this.update = function() {
+      ctx = myGameArea.context;
+      ctx.fillStyle = "black";
+      ctx.beginPath();
+      ctx.moveTo(x, y + 25);
+      ctx.lineTo(x + 10, y+5);
+      ctx.lineTo(x + 20, y +25);
+      ctx.fill();
+  }
+}
 
 
 
