@@ -27,8 +27,16 @@ function collision(obj, other){
           if (obj.type == "barrel"){obj.gravitySpeed = -1;}
           if (obj.type == "dot" && other.type == "barrel"){playerSmashBarrel(other)}
           // Two barrels collide nothing happens, direction is changed in above line
-          if (obj.type == "barrel" && other.type == "barrel"){}
+          if (obj.type == "barrel" && other.type == "barrel"){
+            if (collision(obj, other)){barrelCrushBarrel(obj)}
+          }
           if (other.type == "brokenBarrel"){
+            other.health --;
+            if (other.health == 0){other.color = "red";}
+            if (other.health < 0){
+              other.delete();
+              return;
+            }
             obj.gravitySpeed = -4;
             obj.speedX *= -1;
           }
@@ -38,8 +46,11 @@ function collision(obj, other){
           obj.y = obj.prevY;
           obj.gravitySpeed = .5;
           if (obj.type == "dot" && other.type == "barrel"){barrelHitPlayer(obj)}
+          if (obj.type == "barrel" && other.type == "dot"){playerSmashBarrel(obj)}
           // Two barrels collide nothing happens, direction is changed in above line
-          if (obj.type == "barrel" && other.type == "barrel"){}
+          if (obj.type == "barrel" && other.type == "barrel"){
+            if (collision(obj, other)){barrelCrushBarrel(obj)}
+          }
         }
         //  ---   Left collision
         if (l_collision < r_collision && l_collision < t_collision && l_collision < b_collision){
@@ -47,7 +58,9 @@ function collision(obj, other){
           if (obj.type == "barrel"){obj.speedX *= -1}
           if (obj.type == "dot" && other.type == "barrel"){barrelHitPlayer(obj)}
           // Two barrels collide nothing happens, direction is changed in above line
-          if (obj.type == "barrel" && other.type == "barrel"){}
+          if (obj.type == "barrel" && other.type == "barrel"){
+            if (collision(obj, other)){barrelCrushBarrel(obj)}
+          }
         }
 
         // ----   Right collision
@@ -55,7 +68,9 @@ function collision(obj, other){
           obj.x = obj.prevX;
           if (obj.type == "barrel"){obj.speedX *= -1}
           // Two barrels collide nothing happens, direction is changed in above line
-          if (obj.type == "barrel" && other.type == "barrel"){}
+          if (obj.type == "barrel" && other.type == "barrel"){
+            if (collision(obj, other)){barrelCrushBarrel(obj)}
+          }
           if (obj.type == "dot" && other.type == "barrel"){barrelHitPlayer(obj)}
         }
 
@@ -85,6 +100,16 @@ function crushBarrel(hitBarrel){
   jumpCrushSound.play();
   myGamePiece.gravitySpeed = -2;
   myScore +=20 ;
+  hitBarrel.fall();
+  brokenBarrels.push (new brokenBarrel (hitBarrel.x, hitBarrel.y));
+  hitBarrel.type = "smashedBarrel";
+  barrel = barrel.filter(function( obj ){
+    return obj.type !== 'smashedBarrel';
+  });
+}
+
+function barrelCrushBarrel(hitBarrel){
+  jumpCrushSound.play();
   hitBarrel.fall();
   brokenBarrels.push (new brokenBarrel (hitBarrel.x, hitBarrel.y));
   hitBarrel.type = "smashedBarrel";
