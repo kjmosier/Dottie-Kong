@@ -14,7 +14,7 @@ function startGame() {
   startRect = {x: 190, y: 110, w: 140, h:70};
   loadSounds();
   loadLandscape();
-  myGamePiece = new component(30, 30, "red", 500, 30, "dot");
+  resetGamePiece();
   kong = new component (30,50, "brown", 260, 35);
   pushBarrel();
   myGameArea.start();
@@ -153,12 +153,12 @@ function playerDown (player){
     paused = true;
     barrel = [];
     pushBarrel();
-    myGamePiece = new component(30, 30, "red", 500, 30, "dot");
+    resetGamePiece();
   }
 }
 
 function restartGame(){
-  myGamePiece = new component(30, 30, "red", 500, 30, "dot");
+  resetGamePiece();
   barrel = [];
   pushBarrel();
   lives = 3;
@@ -182,3 +182,5 @@ function wait(ms){
 }
 
 function pushBarrel(){barrel.push(new component (25, 25, "brown", 260, 35, "barrel"));}
+
+function resetGamePiece(){  myGamePiece = new component(30, 30, "red", 5, 300, "dot");}

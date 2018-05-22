@@ -43,6 +43,20 @@ function component(width, height, color, x, y, type) {
         for (i = 0; i < barrel.length; i += 1){
           if (collision(this, barrel[i])){collisionDirection(this, barrel[i])}
         }
+        for (i = 0; i < brokenBarrels.length; i += 1){
+          if (collision(this, brokenBarrels[i])){collisionDirection(this, brokenBarrels[i])}
+        }
+    }
+
+
+    this.fall = function() {
+      collide = false;
+      while (!collide){
+        for (i = 0; i < deck.length; i += 1){
+          if (collision(this, deck[i])){collide = true;}
+        }
+        this.y++;
+      }
     }
 
 }
@@ -55,13 +69,8 @@ function brokenBarrel(x, y){
   this.y = y;
   this.height = 25;
   this.width = 20;
-  collide = false;
-  while (!collide){
-      for (i = 0; i < deck.length; i += 1){
-        if (collision(this, deck[i])){collide == true;}
-      }
-      this.y += 1;
-  }
+  this.type = "brokenBarrel";
+
 
   this.update = function() {
       ctx = myGameArea.context;

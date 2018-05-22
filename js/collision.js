@@ -28,6 +28,10 @@ function collision(obj, other){
           if (obj.type == "dot" && other.type == "barrel"){playerSmashBarrel(other)}
           // Two barrels collide nothing happens, direction is changed in above line
           if (obj.type == "barrel" && other.type == "barrel"){}
+          if (other.type == "brokenBarrel"){
+            obj.gravitySpeed = -4;
+            obj.speedX *= -1;
+          }
         }
         //  ---   bottom collision
         if (b_collision < t_collision && b_collision < l_collision && b_collision < r_collision){
@@ -81,6 +85,7 @@ function crushBarrel(hitBarrel){
   jumpCrushSound.play();
   myGamePiece.gravitySpeed = -2;
   myScore +=20 ;
+  hitBarrel.fall();
   brokenBarrels.push (new brokenBarrel (hitBarrel.x, hitBarrel.y));
   hitBarrel.type = "smashedBarrel";
   barrel = barrel.filter(function( obj ){
