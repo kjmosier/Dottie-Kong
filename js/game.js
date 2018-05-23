@@ -65,6 +65,7 @@ function updateGameArea() {
     printLives();
     updatePosition(kong);
     updatePosition(myGamePiece);
+    clearWalls();
     for (var i in barrels){updatePosition(barrels[i])};
     for (var i in deck){updatePosition(deck[i])};
     for (var i in brokenBarrels){brokenBarrels[i].update()};
@@ -184,3 +185,34 @@ function wait(ms){
 function pushBarrel(){barrels.push(new barrel (25, 25, "brown", 260, 35, "barrel"));}
 
 function resetGamePiece(){myGamePiece = new component(30, 30, "red", 5, 50, "player");}
+
+
+//------------               Clear Walls   -----------------
+function clearWalls(){
+  if (myScore > 650){
+    checkOpen(deck[14]);
+    return;
+  }
+  if (myScore > 450){
+    checkOpen(deck[13]);
+    return;
+  }
+  if (myScore > 250){
+    checkOpen(deck[12]);
+    return;
+  }
+  if (myScore > 150){
+    checkOpen(deck[10]);
+    return;
+  }
+  if (myScore > 50){
+    checkOpen(deck[11]);
+  }
+}
+
+function checkOpen(obj){
+  if (obj.x > 0){
+    gateOpenSound.play();
+    obj.x= -10;
+   }
+}

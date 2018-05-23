@@ -66,7 +66,8 @@ function jumpOnTop(obj, other) {
 
 function bumpHead(obj, other) {
     if (obj.type == "player" && other.type == "barrel") {
-        barrelHitPlayer(obj)
+        barrelHitPlayer(obj);
+        return;
     }
     obj.y = obj.prevY;
     obj.gravitySpeed = .5;
@@ -84,7 +85,8 @@ function bumpHead(obj, other) {
 
 function sideCollide(obj, other){
   if (obj.type == "player" && other.type == "barrel") {
-      barrelHitPlayer(obj)
+      barrelHitPlayer(obj);
+      return;
   }
   obj.x = obj.prevX;
   if (obj.type == "barrel") {
