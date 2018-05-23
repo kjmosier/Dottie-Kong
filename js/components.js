@@ -36,7 +36,7 @@ function textElement(size, font, color, x, y) {
 
 //-----------------  Barrel Class --------
 
-function makeBarrel(width, height, color, x, y, type) {
+function barrel(width, height, color, x, y, type) {
     this.type = type;
     this.width = width;
     this.height = height;
@@ -65,9 +65,9 @@ function makeBarrel(width, height, color, x, y, type) {
         }
     }
     this.delete = function() {
-        this.type = "smashedBarrel";
-        barrel = barrel.filter(function(obj) {
-            return obj.type !== 'smashedBarrel';
+        this.type = "delete";
+        barrels = barrels.filter(function(obj) {
+            return obj.type !== 'delete';
         });
     }
 
@@ -132,9 +132,9 @@ function newPosition(obj) {
             collisionDirection(obj, deck[i])
         }
     }
-    for (i = 0; i < barrel.length; i += 1) {
-        if (collision(obj, barrel[i])) {
-            collisionDirection(obj, barrel[i])
+    for (i = 0; i < barrels.length; i += 1) {
+        if (collision(obj, barrels[i])) {
+            collisionDirection(obj, barrels[i])
         }
     }
     for (i = 0; i < brokenBarrels.length; i += 1) {

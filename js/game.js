@@ -3,7 +3,7 @@ var myScore = 0;
 var deck = [];
 var jumpSound;
 var hitSound;
-var barrel = [];
+var barrels = [];
 var barrelSide = true;
 var brokenBarrels = [];
 var lives = 3;
@@ -54,7 +54,7 @@ var myGameArea = {
 function updateGameArea() {
     if (!paused){
       myGameArea.frameNo += 1;
-      for (var i in barrel){newPosition(barrel[i])};
+      for (var i in barrels){newPosition(barrels[i])};
       getPlayerInput(myGamePiece);
       newPosition(myGamePiece);
     }
@@ -65,11 +65,11 @@ function updateGameArea() {
     printLives();
     updatePosition(kong);
     updatePosition(myGamePiece);
-    for (var i in barrel){updatePosition(barrel[i])};
+    for (var i in barrels){updatePosition(barrels[i])};
     for (var i in deck){updatePosition(deck[i])};
     for (var i in brokenBarrels){brokenBarrels[i].update()};
-    //------------------  Throw Barrel ---------------
-    if (everyinterval(300)){pushBarrel()}
+    //------------------  Throw barrels---------------
+    if (everyinterval(200)){pushBarrel()}
 
     if(paused){
       lives == -1 ? displayGameOver() : showStartButton();
@@ -151,7 +151,7 @@ function playerDown (player){
   else{
     wait(1500);
     paused = true;
-    barrel = [];
+    barrels= [];
     pushBarrel();
     resetGamePiece();
   }
@@ -159,7 +159,7 @@ function playerDown (player){
 
 function restartGame(){
   resetGamePiece();
-  barrel = [];
+  barrels= [];
   pushBarrel();
   lives = 3;
   myScore = 0;
@@ -181,6 +181,6 @@ function wait(ms){
   while(d2-d < ms);
 }
 
-function pushBarrel(){barrel.push(new makeBarrel (25, 25, "brown", 260, 35, "barrel"));}
+function pushBarrel(){barrels.push(new barrel (25, 25, "brown", 260, 35, "barrel"));}
 
-function resetGamePiece(){myGamePiece = new component(30, 30, "red", 5, 50, "dot");}
+function resetGamePiece(){myGamePiece = new component(30, 30, "red", 5, 50, "player");}
