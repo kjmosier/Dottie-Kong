@@ -153,7 +153,7 @@ function newPosition(obj) {
     obj.y += obj.speedY + obj.gravitySpeed;
     if((obj.type == "player") && (obj.x < 30) && (obj.y > 290)){
       winSound.play();
-      iWin();
+      winRound();
     }
     for (i = 0; i < deck.length; i += 1) {
         if (collision(obj, deck[i])) {

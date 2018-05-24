@@ -8,6 +8,8 @@ var barrelSide = true;
 var brokenBarrels = [];
 var lives = 3;
 var paused = true;
+var difficulty = 50;
+var roundScore = 0;
 
 function startGame() {
   showScore = new textElement("Score: ", "15px", "Consolas", "black", "black", 420, 25);
@@ -95,8 +97,8 @@ function everyinterval(n) {
 function getPlayerInput(gamePiece){
   gamePiece.speedX = 0;
   gamePiece.speedY = 0;
-  if (myGameArea.keys && myGameArea.keys[37]) {gamePiece.speedX = -1; }
-  if (myGameArea.keys && myGameArea.keys[39]) {gamePiece.speedX = 1; }
+  if (myGameArea.keys && myGameArea.keys[37]) {gamePiece.speedX = -1.2; }
+  if (myGameArea.keys && myGameArea.keys[39]) {gamePiece.speedX = 1.2; }
   if (myGameArea.keys && myGameArea.keys[32]) {
      if (gamePiece.gravitySpeed == 0){
        gamePiece.gravitySpeed = -4;
@@ -167,11 +169,17 @@ function restartGame(){
   pushBarrel();
   lives = 3;
   myScore = 0;
+  roundScore = 0;
 }
 
-function iWin(){
+function winRound(){
+  resetGamePiece();
+  barrels = [];
+  brokenBarrels = [];
+  loadLandscape();
+  difficulty += 50;
+  roundScore = myScore;
   paused = true;
-  restartGame();
 }
 
 function wait(ms){
@@ -189,26 +197,26 @@ function resetGamePiece(){myGamePiece = new component(30, 30, "red", 5, 50, "pla
 //------------               Clear Walls   -----------------
 function clearWalls(){
   //650
-  if (myScore > 250){
+  if (myScore - roundScore > difficulty * 6){
     checkOpen(deck[14]);
     return;
   }
   //450
-  if (myScore > 200){
+  if (myScore - roundScore > difficulty * 5){
     checkOpen(deck[13]);
     return;
   }
   //250
-  if (myScore > 150){
+  if (myScore - roundScore> difficulty * 4){
     checkOpen(deck[12]);
     return;
   }
   //150
-  if (myScore > 100){
+  if (myScore - roundScore> difficulty * 3){
     checkOpen(deck[10]);
     return;
   }
-  if (myScore > 50){
+  if (myScore - roundScore > difficulty){
     checkOpen(deck[11]);
   }
 }
