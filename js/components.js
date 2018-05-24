@@ -18,20 +18,44 @@ function component(width, height, color, x, y, type) {
 
 //-----------------  Text Class --------
 
-function textElement(size, font, color, x, y) {
+function textElement(text, size, font, color, outline, x, y) {
     this.color = color;
+    this.outline = outline;
     this.x = x;
     this.y = y;
     this.size = size;
     this.font = font;
-    this.text = "Score: ";
+    this.text = text;
+
 
     this.update = function() {
         ctx = myGameArea.context;
         ctx.font = this.size + " " + this.font;
+        ctx.lineWidth = "1";
         ctx.fillStyle = this.color;
+        ctx.strokeStyle = this.outline;
         ctx.fillText(this.text, this.x, this.y);
+        ctx.strokeText(this.text, this.x, this.y);
     }
+}
+
+//--------- Goal Class --------------
+function objective(x, y, width, height, color){
+  this.x = x;
+  this.y = y;
+  this.height = height;
+  this.width = width;
+  this.color = color;
+
+  this.update = function() {
+    ctx = myGameArea.context;
+    ctx.beginPath();
+    ctx.lineWidth = "6";
+    ctx.strokeStyle = color;
+    ctx.rect(this.x, this.y, this.width, this.height);
+    ctx.stroke();
+  }
+
 }
 
 //-----------------  Barrel Class --------
@@ -127,6 +151,10 @@ function newPosition(obj) {
     obj.gravitySpeed += obj.gravity;
     obj.x += obj.speedX;
     obj.y += obj.speedY + obj.gravitySpeed;
+    if((obj.type == "player") && (obj.x < 30) && (obj.y > 290)){
+      winSound.play();
+      iWin();
+    }
     for (i = 0; i < deck.length; i += 1) {
         if (collision(obj, deck[i])) {
             collisionDirection(obj, deck[i])

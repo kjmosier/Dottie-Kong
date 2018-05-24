@@ -10,11 +10,14 @@ var lives = 3;
 var paused = true;
 
 function startGame() {
-  showScore = new textElement("15px", "Consolas", "black", 420, 25);
+  showScore = new textElement("Score: ", "15px", "Consolas", "black", "black", 420, 25);
+  gameOverText = new textElement("Game Over", "60px", "Arial", "yellow", "green", 100, 160);
+  playText = new textElement("Play", "60px", "Arial", "yellow", "green", 200, 165);
   startRect = {x: 190, y: 110, w: 140, h:70};
   loadSounds();
   loadLandscape();
   resetGamePiece();
+  goal = new objective (20, 290, 36, 36, "red");
   kong = new component (30,50, "brown", 260, 35);
   pushBarrel();
   myGameArea.start();
@@ -62,6 +65,7 @@ function updateGameArea() {
     myGameArea.clear();
     showScore.text = "SCORE: " + myScore;
     showScore.update();
+    goal.update();
     printLives();
     updatePosition(kong);
     updatePosition(myGamePiece);
@@ -73,8 +77,9 @@ function updateGameArea() {
     if (everyinterval(200)){pushBarrel()}
 
     if(paused){
-      lives == -1 ? displayGameOver() : showStartButton();
+      lives == -1 ? gameOverText.update() : showStartButton()
     }
+
  }
 
  // ------     End Update GAME AREA  ---------
@@ -118,11 +123,7 @@ function showStartButton(){
   ctx.fillStyle = "white";
   ctx.fillRect(startRect.x, startRect.y, startRect.w, startRect.h);
   ctx.globalAlpha = 1.0;
-  ctx.font = "60px Arial";
-  ctx.fillStyle = "yellow";
-  ctx.strokeStyle = "green";
-  ctx.fillText("Play", startRect.x + 10, startRect.y + 55);;
-  ctx.strokeText("Play", startRect.x + 10, startRect.y + 55);
+  playText.update();
 }
 
 function checkStart(e) {
@@ -161,18 +162,16 @@ function playerDown (player){
 function restartGame(){
   resetGamePiece();
   barrels= [];
+  brokenBarrels = [];
+  loadLandscape();
   pushBarrel();
   lives = 3;
   myScore = 0;
 }
 
-function displayGameOver(){
-  ctx = myGameArea.context;
-  ctx.font = "60px Arial";
-  ctx.fillStyle = "yellow";
-  ctx.strokeStyle = "green";
-  ctx.fillText("Game Over", 100, 160);
-  ctx.strokeText("Game Over", 100, 160);
+function iWin(){
+  paused = true;
+  restartGame();
 }
 
 function wait(ms){
@@ -189,19 +188,23 @@ function resetGamePiece(){myGamePiece = new component(30, 30, "red", 5, 50, "pla
 
 //------------               Clear Walls   -----------------
 function clearWalls(){
-  if (myScore > 650){
+  //650
+  if (myScore > 250){
     checkOpen(deck[14]);
     return;
   }
-  if (myScore > 450){
+  //450
+  if (myScore > 200){
     checkOpen(deck[13]);
     return;
   }
-  if (myScore > 250){
+  //250
+  if (myScore > 150){
     checkOpen(deck[12]);
     return;
   }
-  if (myScore > 150){
+  //150
+  if (myScore > 100){
     checkOpen(deck[10]);
     return;
   }
